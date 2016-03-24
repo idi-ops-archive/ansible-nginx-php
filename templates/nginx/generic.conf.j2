@@ -1,16 +1,16 @@
-{% for domain in phpsite_domains[1:] %}
+{% for domain in nginx_php_domains[1:] %}
 server {
   server_name                  {{ domain }};
-  return                       301 $scheme://{{ phpsite_domains[0] }}$request_uri;
+  return                       301 $scheme://{{ nginx_php_domains[0] }}$request_uri;
 }
 {% endfor %}
 
 server {
     listen                          80;
-    server_name                     {{ phpsite_domains[0] }};
-    root                            {{ phpsite_base_path }}/{{ phpsite_id }};
+    server_name                     {{ nginx_php_domains[0] }};
+    root                            {{ nginx_php_base_path }}/{{ nginx_php_id }};
 
-    client_max_body_size           {{ phpsite_max_body_size }};
+    client_max_body_size           {{ nginx_php_max_body_size }};
     
     location / {
       index                         index.php index.htm index.html;
@@ -22,7 +22,7 @@ server {
 
     #location ^~ /error/ {
     #    internal;
-    #    root {{ phpsite_base_path }}/{{ phpsite_id }}/htdocs;
+    #    root {{ nginx_php_base_path }}/{{ nginx_php_id }}/htdocs;
     #}
 
     location ~* \.(js|css|png|jpg|jpeg|bmp|gif|ico|ttf|otf|woff)$ {
@@ -35,7 +35,7 @@ server {
         fastcgi_split_path_info  ^(.+\.php)(/.+)$;
         include                  fastcgi_params;
         fastcgi_param            SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_pass             unix:/var/run/php-fpm/php-fpm-{{ phpsite_id }}.sock;
+        fastcgi_pass             unix:/var/run/php-fpm/php-fpm-{{ nginx_php_id }}.sock;
 
     }
 
@@ -43,7 +43,7 @@ server {
       deny                     all;
     }
 
-    access_log /var/log/nginx/{{ phpsite_id }}-access.log main;
-    error_log  /var/log/nginx/{{ phpsite_id }}-error.log  warn;
+    access_log /var/log/nginx/{{ nginx_php_id }}-access.log main;
+    error_log  /var/log/nginx/{{ nginx_php_id }}-error.log  warn;
 
 }

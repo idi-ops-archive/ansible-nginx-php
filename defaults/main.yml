@@ -1,21 +1,21 @@
 ---
 
-#phpsite_id
+#nginx_php_id
 
-phpsite_domains: []
+nginx_php_domains: []
 
-phpsite_group: www
-phpsite_max_children: 128
-phpsite_start_servers: 8
-phpsite_min_spare_servers: 8
-phpsite_max_spare_servers: 16
-phpsite_slowlog_timeout: '1m'
+nginx_php_group: www
+nginx_php_max_children: 128
+nginx_php_start_servers: 8
+nginx_php_min_spare_servers: 8
+nginx_php_max_spare_servers: 16
+nginx_php_slowlog_timeout: '1m'
 
-phpsite_max_body_size: '128M'
-phpsite_post_max_size: '256M'
-phpsite_upload_max_filesize: '128M'
-phpsite_max_body_size: '128M'
+nginx_php_max_body_size: '128M'
+nginx_php_post_max_size: '256M'
+nginx_php_upload_max_filesize: '128M'
+nginx_php_max_body_size: '128M'
 
-phpsite_base_path: /srv/www
+nginx_php_base_path: /srv/www
 
-phpsite_type: generic # generic, wordpress, drupal, mediawiki
+nginx_php_type: generic # generic, wordpress, drupal, mediawiki
