@@ -1,0 +1,21 @@
+---
+
+#phpsite_id
+
+phpsite_domains: []
+
+phpsite_group: www
+phpsite_max_children: 128
+phpsite_start_servers: 8
+phpsite_min_spare_servers: 8
+phpsite_max_spare_servers: 16
+phpsite_slowlog_timeout: '1m'
+
+phpsite_max_body_size: '128M'
+phpsite_post_max_size: '256M'
+phpsite_upload_max_filesize: '128M'
+phpsite_max_body_size: '128M'
+
+phpsite_base_path: /srv/www
+
+phpsite_type: generic # generic, wordpress, drupal, mediawiki

@@ -1,0 +1,46 @@
+---
+
+- name: Create user
+  user:
+    name: "{{ phpsite_id }}"
+    group: "{{ phpsite_group }}"
+    comment: "PHP Website - {{ phpsite_id }}"
+    home: "{{ phpsite_base_path }}/{{ phpsite_id }}"
+    createhome: no
+    shell: /sbin/nologin
+    state: present
+
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ phpsite_id }}"
+    group: "{{ phpsite_group }}"
+    seuser: system_u
+    serole: object_r
+    setype: httpd_sys_content_t
+  with_items:
+    - "{{ phpsite_base_path }}/{{ phpsite_id }}"
+    - "{{ phpsite_base_path }}/{{ phpsite_id }}/tmp"
+
+- name: Configure nginx
+  template:
+    src: "nginx/{{ phpsite_type|default('generic') }}.conf.j2"
+    dest: "/etc/nginx/conf.d/{{ phpsite_id }}.conf"
+    owner: root
+    group: root
+    mode: '0644'
+    backup: no
+  notify:
+    - restart nginx
+
+- name: Configure php-fpm
+  template:
+    src: php-fpm.conf.j2
+    dest: "/etc/php-fpm.d/{{ phpsite_id }}.conf"
+    owner: root
+    group: root
+    mode: '0644'
+    backup: no
+  notify:
+    - restart php-fpm

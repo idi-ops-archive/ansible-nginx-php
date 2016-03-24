@@ -1,0 +1,28 @@
+[{{ phpsite_id }}]
+listen = /var/run/php-fpm/php-fpm-{{ phpsite_id }}.sock
+
+user = {{ phpsite_id }}
+group = {{ phpsite_group }}
+
+pm = dynamic
+pm.max_children = {{ phpsite_max_children }}
+pm.start_servers = {{ phpsite_start_servers }}
+pm.min_spare_servers = {{ phpsite_min_spare_servers }}
+pm.max_spare_servers = {{ phpsite_max_spare_servers }}
+
+catch_workers_output = yes
+ 
+request_slowlog_timeout = {{ phpsite_slowlog_timeout }}
+slowlog = /var/log/php-fpm/{{ phpsite_id }}-php-slow.log
+
+php_admin_value[open_basedir] = {{ phpsite_base_path }}/{{ phpsite_id }}
+
+php_admin_flag[log_errors] = on
+php_admin_value[error_log] = stderr
+
+php_value[post_max_size] = {{ phpsite_post_max_size }}
+php_value[upload_max_filesize] = {{ phpsite_upload_max_filesize }}
+php_value[upload_tmp_dir] = {{ phpsite_base_path }}/{{ phpsite_id }}/tmp
+
+php_value[session.save_handler] = files
+php_value[session.save_path] = {{ phpsite_base_path }}/{{ phpsite_id }}/tmp

@@ -1,0 +1,49 @@
+{% for domain in phpsite_domains[1:] %}
+server {
+  server_name                  {{ domain }};
+  return                       301 $scheme://{{ phpsite_domains[0] }}$request_uri;
+}
+{% endfor %}
+
+server {
+    listen                          80;
+    server_name                     {{ phpsite_domains[0] }};
+    root                            {{ phpsite_base_path }}/{{ phpsite_id }};
+
+    client_max_body_size           {{ phpsite_max_body_size }};
+    
+    location / {
+      index                         index.php index.htm index.html;
+    }
+
+    #error_page 403                 /error/403.html;
+    #error_page 404                 /error/404.html;
+    #error_page 500 501 502 503 504 /error/5xx.html;
+
+    #location ^~ /error/ {
+    #    internal;
+    #    root {{ phpsite_base_path }}/{{ phpsite_id }}/htdocs;
+    #}
+
+    location ~* \.(js|css|png|jpg|jpeg|bmp|gif|ico|ttf|otf|woff)$ {
+      expires                  max;
+      log_not_found            off;
+    }
+
+    location ~ \.php$ {
+        try_files                $uri =404;
+        fastcgi_split_path_info  ^(.+\.php)(/.+)$;
+        include                  fastcgi_params;
+        fastcgi_param            SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_pass             unix:/var/run/php-fpm/php-fpm-{{ phpsite_id }}.sock;
+
+    }
+
+    location ~ /\.(git|htaccess) {
+      deny                     all;
+    }
+
+    access_log /var/log/nginx/{{ phpsite_id }}-access.log main;
+    error_log  /var/log/nginx/{{ phpsite_id }}-error.log  warn;
+
+}
