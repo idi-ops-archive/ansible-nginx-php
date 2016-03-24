@@ -2,10 +2,10 @@
 
 - name: Create user
   user:
-    name: "{{ phpsite_id }}"
-    group: "{{ phpsite_group }}"
-    comment: "PHP Website - {{ phpsite_id }}"
-    home: "{{ phpsite_base_path }}/{{ phpsite_id }}"
+    name: "{{ nginx_php_id }}"
+    group: "{{ nginx_php_group }}"
+    comment: "PHP Website - {{ nginx_php_id }}"
+    home: "{{ nginx_php_base_path }}/{{ nginx_php_id }}"
     createhome: no
     shell: /sbin/nologin
     state: present
@@ -14,19 +14,19 @@
   file:
     path: "{{ item }}"
     state: directory
-    owner: "{{ phpsite_id }}"
-    group: "{{ phpsite_group }}"
+    owner: "{{ nginx_php_id }}"
+    group: "{{ nginx_php_group }}"
     seuser: system_u
     serole: object_r
     setype: httpd_sys_content_t
   with_items:
-    - "{{ phpsite_base_path }}/{{ phpsite_id }}"
-    - "{{ phpsite_base_path }}/{{ phpsite_id }}/tmp"
+    - "{{ nginx_php_base_path }}/{{ nginx_php_id }}"
+    - "{{ nginx_php_base_path }}/{{ nginx_php_id }}/tmp"
 
 - name: Configure nginx
   template:
-    src: "nginx/{{ phpsite_type|default('generic') }}.conf.j2"
-    dest: "/etc/nginx/conf.d/{{ phpsite_id }}.conf"
+    src: "nginx/{{ nginx_php_type|default('generic') }}.conf.j2"
+    dest: "/etc/nginx/conf.d/{{ nginx_php_id }}.conf"
     owner: root
     group: root
     mode: '0644'
@@ -37,7 +37,7 @@
 - name: Configure php-fpm
   template:
     src: php-fpm.conf.j2
-    dest: "/etc/php-fpm.d/{{ phpsite_id }}.conf"
+    dest: "/etc/php-fpm.d/{{ nginx_php_id }}.conf"
     owner: root
     group: root
     mode: '0644'
