@@ -1,13 +1,6 @@
-{% for domain in nginx_php_domains[1:] %}
-server {
-  server_name                  {{ domain }};
-  return                       301 $scheme://{{ nginx_php_domains[0] }}$request_uri;
-}
-{% endfor %}
-
 server {
   listen                       80;
-  server_name                  {{ nginx_php_domains[0] }};
+  server_name                  {{ nginx_php_domains|join(' ') }};
   root                         {{ nginx_php_base_path }}/{{ nginx_php_id }};
 
   client_max_body_size           {{ nginx_php_max_body_size }};
