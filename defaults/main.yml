@@ -14,7 +14,6 @@ nginx_php_slowlog_timeout: '1m'
 nginx_php_max_body_size: '128M'
 nginx_php_post_max_size: '256M'
 nginx_php_upload_max_filesize: '128M'
-nginx_php_max_body_size: '128M'
 
 nginx_php_base_path: /srv/www
 
